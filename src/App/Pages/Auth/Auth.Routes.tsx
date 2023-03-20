@@ -1,14 +1,10 @@
-import React from "react";
-import { Outlet, Route, Routes } from "react-router-dom";
-
-const H1 = () => <>1</>;
-const H2 = () => <>2</>;
-const H3 = () => <>3</>;
+import { SignIn } from "./SignIn/SignIn";
+import { SignOn } from "./SignOn/SignOn";
 
 export const authRoutes = [
-  { path: "home", component: H1 },
-  { path: "start", component: H2 },
-  { path: "init", component: H3 },
+  { path: "", component: SignIn },
+  { path: "signin", component: SignIn },
+  { path: "signon", component: SignOn },
 ];
 
 
