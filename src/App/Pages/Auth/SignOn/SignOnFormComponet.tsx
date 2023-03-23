@@ -1,104 +1,111 @@
-import { useForm } from "react-hook-form";
 import { Api } from "../../../Api/Api";
 import { services } from "../../../Api/services";
 import { IFormInput, signOnDataType } from "./SignOnInterface";
+
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Button, Form, Row } from "react-bootstrap";
+import { z } from "zod";
+import { useEffect } from "react";
+
+const signOnFormSchema = z.object({
+  username: z.string().min(4),
+  email: z.string().email(),
+  password: z.string().min(8),
+  rememberMe: z.boolean(),
+});
 
 export const SignOnComponent = () => {
   const {
     register,
     handleSubmit,
+    watch,
     formState: { errors },
-  } = useForm<IFormInput>();
+  } = useForm({
+    resolver: zodResolver(signOnFormSchema),
+  });
 
-  const service: any = services.auth.signOn;
 
-  const { resolve, data, isLoading, error } = Api({ service });
+  const { resolve, data, isloading, error }: any = Api({
+    service: services.auth.signOn,
+  });
 
-  const onSubmit = (params: IFormInput) => {
-    console.log(params);
-    resolve({ form: params });
+  const onSubmit = (form: any) => {
+    resolve({ form });
   };
+
+  useEffect(() => {
+    if (!error && data) {
+      localStorage.setItem("user", JSON.stringify(data.user));
+      localStorage.setItem("authorization", JSON.stringify(data.user.apikey));
+    }
+  }, [data]);
 
   return (
     <>
-      <pre>{JSON.stringify(data)}</pre>
-      <pre>{JSON.stringify(error)}</pre>
+      {
+        error ? <>
+        {
+          
+          Object.keys(error).map((key, index) => 
+            (
+              <ServerErrorMessage message={error[key][0]}/>
+            )
+          )
+        }
+        </> : <></>
+      }
+
       <form role="form" onSubmit={handleSubmit(onSubmit)}>
         <label>Name</label>
-        <div className="mb-3">
-          <input
-            type="text"
-            className="form-control"
-            placeholder="Enter your name"
-            aria-label="Name"
-            aria-describedby="name-addon"
-            {...register("name", {
-              required: true,
-              maxLength: 20,
-              pattern: /^[A-Za-z]+$/i,
-            })}
-          />
-          {errors.name && <ErrorMessage message={errors.name?.message} />}
-        </div>
+
+        <Form.Control
+          placeholder="Enter your username"
+          autoComplete="off"
+          type="text"
+          {...register("username")}
+        />
+        {errors.username && <ErrorMessage message={errors.username?.message} />}
 
         <label>Email Address</label>
-        <div className="mb-3">
-          <div className="mb-3">
-            <input
-              type="email"
-              className="form-control"
-              placeholder="Enter your email address"
-              aria-label="Email"
-              aria-describedby="email-addon"
-              {...register("email", {
-                required: true,
-              })}
-            />
-            {errors.email && <ErrorMessage message={errors.email?.message} />}
-          </div>
-        </div>
+        <Form.Control
+          placeholder="Enter your email address"
+          autoComplete="off"
+          type="email"
+          {...register("email")}
+        />
+        {errors.email && <ErrorMessage message={errors.email?.message} />}
 
         <label>Password</label>
         <div className="mb-3">
-          <input
+          <Form.Control
+            placeholder="Enter your email password"
+            autoComplete="off"
             type="password"
-            className="form-control"
-            placeholder="Create a password"
-            aria-label="Password"
-            aria-describedby="password-addon"
-            {...register("password", {
-              required: true,
-              minLength: 8,
-              maxLength: 16,
-            })}
+            {...register("password")}
           />
           {errors.password && (
             <ErrorMessage message={errors.password?.message} />
           )}
         </div>
-
-        <div className="form-check form-check-info text-left mb-0">
-          <input
-            className="checkbox"
-            type="checkbox"
-            value=""
-            id="flexCheckDefault"
-            {...register("rememberMe")}
-          />
-          <label
-            className="font-weight-normal text-dark mb-0"
-            htmlFor="flexCheckDefault"
-          >
-            I agree the{" "}
-            <a href="javascript:;" className="text-dark font-weight-bold">
+        <div className="d-flex align-items-center">
+          <div className="form-check form-check-info text-left mb-0">
+            <Form.Check
+              type="checkbox"
+              id="flexCheckDefault"
+              {...register("rememberMe")}
+            />
+            <label
+              className="font-weight-normal text-dark mb-0"
+              htmlFor="flexCheckDefault"
+            >
               Terms and Conditions
-            </a>
-            .
-          </label>
-          {errors.rememberMe && (
-            <ErrorMessage message={errors.rememberMe?.message} />
-          )}
+            </label>
+          </div>
         </div>
+        {errors.rememberMe && (
+          <ErrorMessage message={errors.rememberMe?.message} />
+        )}
         <div className="text-center">
           <button type="submit" className="btn btn-dark w-100 mt-4 mb-3">
             Sign up
@@ -122,4 +129,8 @@ export const SignOnComponent = () => {
 
 const ErrorMessage = ({ message }: any) => (
   <div style={{ color: "#F00", fontSize: "10px" }}>{message}</div>
+);
+
+const ServerErrorMessage = ({ message }: any) => (
+  <div className="text text-center" style={{ color: "#F00", fontSize: "15px" }}>{message}</div>
 );
