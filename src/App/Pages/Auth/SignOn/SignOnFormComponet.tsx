@@ -1,7 +1,7 @@
 import { useState } from "react";
 import ReactDOM from "react-dom";
 import { useForm } from "react-hook-form";
-import { useApi } from "../../../Api/Api";
+import { Api } from "../../../Api/Api";
 import { IFormInput, signOnDataType } from "./SignOnInterface";
 
 export const SignOnComponent = () => {
@@ -20,7 +20,7 @@ export const SignOnComponent = () => {
     
     const service: any ={endpoint:'users', method:'post'};
 
-    const {data, isLoading, error} = useApi({service, params})
+    const {data, isLoading, error} = Api({service, params})
 
 
     alert(isLoading)
