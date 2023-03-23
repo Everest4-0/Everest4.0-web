@@ -1,38 +1,28 @@
-import { useState } from "react";
-import ReactDOM from "react-dom";
 import { useForm } from "react-hook-form";
 import { Api } from "../../../Api/Api";
+import { services } from "../../../Api/services";
 import { IFormInput, signOnDataType } from "./SignOnInterface";
 
 export const SignOnComponent = () => {
-
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<IFormInput>();
 
-  const [data, setData] = useState<signOnDataType>();
-  const [isLoading, setLoading] = useState<boolean>();
-  const [error, setError] = useState<any>();
+  const service: any = services.auth.signOn;
+
+  const { resolve, data, isLoading, error } = Api({ service });
 
   const onSubmit = (params: IFormInput) => {
-    
-    const service: any ={endpoint:'users', method:'post'};
-
-    const {data, isLoading, error} = Api({service, params})
-
-
-    alert(isLoading)
-
+    console.log(params);
+    resolve({ form: params });
   };
 
- 
   return (
     <>
-    {
-      isLoading
-    }
+      <pre>{JSON.stringify(data)}</pre>
+      <pre>{JSON.stringify(error)}</pre>
       <form role="form" onSubmit={handleSubmit(onSubmit)}>
         <label>Name</label>
         <div className="mb-3">
@@ -48,13 +38,7 @@ export const SignOnComponent = () => {
               pattern: /^[A-Za-z]+$/i,
             })}
           />
-          {errors?.name?.type === "required" && <p>This field is required</p>}
-          {errors?.name?.type === "maxLength" && (
-            <p>First name cannot exceed 20 characters</p>
-          )}
-          {errors?.name?.type === "pattern" && (
-            <p>Alphabetical characters only</p>
-          )}
+          {errors.name && <ErrorMessage message={errors.name?.message} />}
         </div>
 
         <label>Email Address</label>
@@ -70,10 +54,7 @@ export const SignOnComponent = () => {
                 required: true,
               })}
             />
-            {errors?.email?.type === "required" && (
-              <p>This field is required</p>
-            )}
-            
+            {errors.email && <ErrorMessage message={errors.email?.message} />}
           </div>
         </div>
 
@@ -91,22 +72,18 @@ export const SignOnComponent = () => {
               maxLength: 16,
             })}
           />
-          {errors?.password?.type === "required" && <p>This field is required</p>}
-          {errors?.password?.type === "minLength" && (
-            <p>Password minLength insuficient</p>
+          {errors.password && (
+            <ErrorMessage message={errors.password?.message} />
           )}
-          {errors?.password?.type === "maxLength" && (
-            <p>First name cannot exceed 20 characters</p>
-          )}
-          
         </div>
 
         <div className="form-check form-check-info text-left mb-0">
           <input
-            className="form-check-input"
+            className="checkbox"
             type="checkbox"
             value=""
             id="flexCheckDefault"
+            {...register("rememberMe")}
           />
           <label
             className="font-weight-normal text-dark mb-0"
@@ -118,9 +95,11 @@ export const SignOnComponent = () => {
             </a>
             .
           </label>
+          {errors.rememberMe && (
+            <ErrorMessage message={errors.rememberMe?.message} />
+          )}
         </div>
         <div className="text-center">
-
           <button type="submit" className="btn btn-dark w-100 mt-4 mb-3">
             Sign up
           </button>
@@ -140,3 +119,7 @@ export const SignOnComponent = () => {
     </>
   );
 };
+
+const ErrorMessage = ({ message }: any) => (
+  <div style={{ color: "#F00", fontSize: "10px" }}>{message}</div>
+);

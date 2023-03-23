@@ -93,7 +93,7 @@ const SignInForm = () => {
       </div>
       <div className="d-flex align-items-center">
         <div className="form-check form-check-info text-left mb-0">
-          <Form.Check type="checkbox" id="flexCheckDefault"{...register("rememberMe")} />
+          <Form.Check type="checkbox" id="flexCheckDefault" {...register("rememberMe")} />
           <label
             className="font-weight-normal text-dark mb-0"
             htmlFor="flexCheckDefault"

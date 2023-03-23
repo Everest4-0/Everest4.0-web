@@ -7,6 +7,7 @@ type ApiParamsType = {
     id?: string,
 }
 export const Api = ({ service, id, params }: ApiParamsType) => {
+  
     const [data, setData] = useState<any>()
     const [isLoading, setLoading] = useState<boolean>()
     const [error, setError] = useState<any>()
