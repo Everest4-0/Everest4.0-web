@@ -2,72 +2,126 @@ import axios from "axios";
 import { useMemo, useState } from "react";
 
 type ApiParamsType = {
-  service: {
-    endpoint: string,
-    method: string
-  };
-  id?: string;
-  params?: any;
-};
-export const useApi = ({ service, id, params }: ApiParamsType) => {
+    service: any,
+    params?: any,
+    id?: string,
+}
+export const Api = ({ service, id, params }: ApiParamsType) => {
+    const [data, setData] = useState<any>()
+    const [isLoading, setLoading] = useState<boolean>()
+    const [error, setError] = useState<any>()
+    const { endpoint, method }: any = service;
+    const headers = getHeaders()
 
-  const [data, setData] = useState<any>();
-  const [isLoading, setLoading] = useState<boolean>();
-  const [error, setError] = useState<any>();
-  const { endpoint, method } = service;
+    const resolver: any = {
+        post: async ({ form }: any) => {
+            setLoading(true)
+            try {
+                const { data }= await axios.post(endpoint, form, { headers });
+                console.log('👉 Returned data:', data);
+                //toast.success('Registo feito com sucesso');
+                setData(data)
+                setError(null)
+            } catch (e: any) {
+                console.log(`😱 Axios request failed: ${e}`);
+                setError(e)
+                //toast.error('😱 Erro: ' + JSON.stringify(e?.response?.data));
+                return e;
+            }
+            setLoading(false)
+        }, get: async ({ id, params }: any) => {
+            setLoading(true)
+            let url = endpoint
+            if (id) {
+                url = `${url}/${id}`
+            }
 
-  useMemo(() => {
-    const fetchGet = async () => {
-      setLoading(true);
-      try {
-        let url = [endpoint, process.env.DEV_ENDPOINT];
-        if (id) {
-          url.push(id);
+            if (params) {
+                const query = new URLSearchParams(params).toString();
+                url = `${url}/?${query}`;
+
+
+            }
+
+            try {
+                const response = await axios.get(url, { headers });
+                console.log('👉 Returned data:', response);
+                setData(response)
+                setError(null)
+            } catch (e: any) {
+                console.log(`😱 Axios request failed: ${e}`);
+                setError(e)
+                //toast.error('😱 Erro: ' + JSON.stringify(e?.response?.data));
+                return e;
+            }
+            setLoading(false)
+        }, drop: async ({ id }: any) => {
+            setLoading(true)
+            let url = endpoint
+            if (id) {
+                url = `${url}/${id}`
+            }
+
+            try {
+                const response = await axios.delete(url, { headers });
+                console.log('👉 Returned data:', response);
+                setData(response)
+                setError(null)
+            } catch (e: any) {
+                console.log(`😱 Axios request failed: ${e}`);
+                setError(e)
+                //toast.error('😱 Erro: ' + JSON.stringify(e?.response?.data));
+                return e;
+            }
+            setLoading(false)
+        }, put: async ({ id, form }: any) => {
+            setLoading(true)
+            let url = `${endpoint}/${data?.id ?? id}`
+
+            try {
+                const response = await axios.put(url, data, { headers });
+                console.log('👉 Returned data:', response);
+                setData(response)
+                setError(null)
+            } catch (e: any) {
+                console.log(`😱 Axios request failed: ${e}`);
+                setError(e)
+                //toast.error('😱 Erro: ' + JSON.stringify(e?.response?.data));
+                return e;
+            }
+            setLoading(false)
         }
-        const { response }: any = await axios.get(url.join("/"));
-
-        setData(response);
-        setLoading(false);
-      } catch (error) {
-        setError(error);
-      }
-    };
-
-    const fetchPost = async () => {
-      setLoading(true);
-      try {
-        let url = [endpoint, process.env.DEV_ENDPOINT];
-        if (id) {
-          url.push(id);
-        }
-        const { response }: any = await axios.post(url.join("/"), params);
-
-        setData(response);
-        setLoading(false);
-      } catch (error) {
-        setError(error);
-      }
-    };
-
-    switch (method) {
-      case "GET":
-        fetchGet();
-
-        break;
-
-      case "POST":
-        fetchPost();
-
-        break;
-
-      default:
-        break;
     }
-  }, [data, id]);
 
-  return {
-    data,
-    isLoading,
-    error,
-  };
+    const resolve = resolver[method.toLowerCase()]
+
+    useMemo(() => {
+        if (method === 'GET')
+            resolver.get({ id, params })
+    }, [data, id])
+
+    return {
+        data, isLoading, error, resolve
+    }
+}
+
+
+
+export const getHeaders = () => {
+    const token = '';//storage.get('token');
+
+    let headers: any = {
+        "withCredentials": true,
+        "Content-type": "application/json",
+    }
+    headers["Authorization"] = `Bearer ${token}`;
+    return headers;
 };
+(() => {
+    axios.defaults.baseURL = 'http://192.168.100.44:9800/api/v1/'/**///process.env.REACT_APP_BASE_URL_API;
+
+    axios.defaults.headers.common["apikey"] = "process.env.REACT_APP_BASE_API_KEY ?? '3265'";
+
+})()
+
+const headers = getHeaders() 
