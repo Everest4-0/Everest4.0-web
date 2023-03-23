@@ -1,6 +1,5 @@
 import React from "react";
 import { Link } from "react-router-dom";
-
 import { SignInForm } from "./SignInForm/SignInForm";
 
 export const SignIn = () => {

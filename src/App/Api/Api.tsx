@@ -1,5 +1,5 @@
-import axios from 'axios';
-import { useMemo, useState } from "react"
+import axios from "axios";
+import { useMemo, useState } from "react";
 
 type ApiParamsType = {
     service: any,
@@ -7,6 +7,7 @@ type ApiParamsType = {
     id?: string,
 }
 export const Api = ({ service, id, params }: ApiParamsType) => {
+  
     const [data, setData] = useState<any>()
     const [isLoading, setLoading] = useState<boolean>()
     const [error, setError] = useState<any>()
@@ -18,15 +19,13 @@ export const Api = ({ service, id, params }: ApiParamsType) => {
             setLoading(true)
             try {
                 const { data }= await axios.post(endpoint, form, { headers });
-                console.log('👉 Returned data:', data);
                 //toast.success('Registo feito com sucesso');
                 setData(data)
                 setError(null)
-            } catch (e: any) {
-                console.log(`😱 Axios request failed: ${e}`);
-                setError(e)
+            } catch ({response:{data}}: any) {
+                setError(data)
                 //toast.error('😱 Erro: ' + JSON.stringify(e?.response?.data));
-                return e;
+                return data;
             }
             setLoading(false)
         }, get: async ({ id, params }: any) => {
@@ -45,14 +44,12 @@ export const Api = ({ service, id, params }: ApiParamsType) => {
 
             try {
                 const response = await axios.get(url, { headers });
-                console.log('👉 Returned data:', response);
                 setData(response)
                 setError(null)
-            } catch (e: any) {
-                console.log(`😱 Axios request failed: ${e}`);
-                setError(e)
+            } catch ({response:{data}}: any) {
+                setError(data)
                 //toast.error('😱 Erro: ' + JSON.stringify(e?.response?.data));
-                return e;
+                return data;
             }
             setLoading(false)
         }, drop: async ({ id }: any) => {
@@ -64,15 +61,13 @@ export const Api = ({ service, id, params }: ApiParamsType) => {
 
             try {
                 const response = await axios.delete(url, { headers });
-                console.log('👉 Returned data:', response);
                 setData(response)
                 setError(null)
-            } catch (e: any) {
-                console.log(`😱 Axios request failed: ${e}`);
-                setError(e)
-                //toast.error('😱 Erro: ' + JSON.stringify(e?.response?.data));
-                return e;
-            }
+            }catch ({response:{data}}: any) {
+                    setError(data)
+                    //toast.error('😱 Erro: ' + JSON.stringify(e?.response?.data));
+                    return data;
+                }
             setLoading(false)
         }, put: async ({ id, form }: any) => {
             setLoading(true)
@@ -80,14 +75,12 @@ export const Api = ({ service, id, params }: ApiParamsType) => {
 
             try {
                 const response = await axios.put(url, data, { headers });
-                console.log('👉 Returned data:', response);
                 setData(response)
                 setError(null)
-            } catch (e: any) {
-                console.log(`😱 Axios request failed: ${e}`);
-                setError(e)
+            } catch ({response:{data}}: any) {
+                setError(data)
                 //toast.error('😱 Erro: ' + JSON.stringify(e?.response?.data));
-                return e;
+                return data;
             }
             setLoading(false)
         }
