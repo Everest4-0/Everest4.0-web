@@ -1,45 +1,73 @@
-import axios from 'axios';
-import { useMemo, useState } from "react"
+import axios from "axios";
+import { useMemo, useState } from "react";
 
 type ApiParamsType = {
-    service: any,
-    params: any,
-    id: string,
-}
-export const Api = ({ service, id, params }: ApiParamsType) => {
-    const [data, setData] = useState<any>()
-    const [isLoading, setLoading] = useState<boolean>()
-    const [error, setError] = useState<any>()
-    const { endpoint, method } = service;
+  service: {
+    endpoint: string,
+    method: string
+  };
+  id?: string;
+  params?: any;
+};
+export const useApi = ({ service, id, params }: ApiParamsType) => {
 
-    useMemo(() => {
+  const [data, setData] = useState<any>();
+  const [isLoading, setLoading] = useState<boolean>();
+  const [error, setError] = useState<any>();
+  const { endpoint, method } = service;
 
-        const fetchGet = async () => {
-            setLoading(true)
-            try {
-
-                let url = [endpoint];
-                if (id) {
-                    url.push(id)
-                }
-                const { response }: any = await axios.get(url.join('/'));
-
-                setData(response)
-                setLoading(false)
-
-            } catch (error) {
-                setError(error)
-            }
+  useMemo(() => {
+    const fetchGet = async () => {
+      setLoading(true);
+      try {
+        let url = [endpoint, process.env.DEV_ENDPOINT];
+        if (id) {
+          url.push(id);
         }
+        const { response }: any = await axios.get(url.join("/"));
 
-        if (method === 'GET')
+        setData(response);
+        setLoading(false);
+      } catch (error) {
+        setError(error);
+      }
+    };
 
-            fetchGet()
+    const fetchPost = async () => {
+      setLoading(true);
+      try {
+        let url = [endpoint, process.env.DEV_ENDPOINT];
+        if (id) {
+          url.push(id);
+        }
+        const { response }: any = await axios.post(url.join("/"), params);
 
-    }, [data, id])
+        setData(response);
+        setLoading(false);
+      } catch (error) {
+        setError(error);
+      }
+    };
 
+    switch (method) {
+      case "GET":
+        fetchGet();
 
-    return {
-        data, isLoading, error
+        break;
+
+      case "POST":
+        fetchPost();
+
+        break;
+
+      default:
+        break;
     }
-}
+  }, [data, id]);
+
+  return {
+    data,
+    isLoading,
+    error,
+  };
+};
