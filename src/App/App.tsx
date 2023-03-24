@@ -16,9 +16,10 @@ function App() {
     <>
       <BrowserRouter>
         <NewRoute path="/auth" routes={authRoutes} layout={<AuthLayout />}/>
-        <NewRoute path="/user/*" routes={userRoutes} layout={<UserLayout/>}/>
+        
         <NewRoute path="/admin/*" routes={adminRoutes} layout={<AdminLayout/>}/>
-        <NewRoute path="/" routes={mainRoutes} layout={<MainLayout />}/>
+        {/*<NewRoute path="/" routes={mainRoutes} layout={<MainLayout />}/>*/}
+        <NewRoute path="/" routes={userRoutes} layout={<UserLayout/>}/>
       </BrowserRouter>
     </>
   );
