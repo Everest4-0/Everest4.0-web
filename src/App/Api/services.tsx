@@ -18,7 +18,20 @@ export const services: any = {
       method: "GET",
     },
   },
-  roles: {},
+  evaluationRequests: {
+    list: {
+      endpoint: "evaluation-requests",
+      method: "GET",
+    },
+  },
+
+  evaluations: {
+    list: {
+      endpoint: "evaluations",
+      method: "GET",
+    },
+  },
+  
   acls: {},
   chats: {},
 };

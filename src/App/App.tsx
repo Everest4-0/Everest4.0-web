@@ -15,8 +15,8 @@ function App() {
     <>
       <BrowserRouter>
         <NewRoute path="/auth" routes={authRoutes} layout={<AuthLayout />}/>
-        <NewRoute path="/admin/*" routes={adminRoutes} layout={<AdminLayout/>}/>
-        <NewRoute path="/*" routes={mainRoutes} layout={<MainLayout />}/>
+        <NewRoute path="/admin" routes={adminRoutes} layout={<AdminLayout/>}/>
+        <NewRoute path="/" routes={mainRoutes} layout={<MainLayout />}/>
       </BrowserRouter>
     </>
   );

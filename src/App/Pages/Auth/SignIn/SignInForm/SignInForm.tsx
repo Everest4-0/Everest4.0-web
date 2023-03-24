@@ -26,11 +26,12 @@ export const SignInForm = () => {
 
     const onSubmit = (form: any) => resolve({ form })
     useMemo(() => {
+        debugger
         if (data?.id) {
             //TODO: Find a way to use a storage beside localstorage
             localStorage.setItem('data', JSON.stringify(data))
             //TODO: fix on the backend the authorization key name use 'authorization' beside 'apikey'
-            localStorage.setItem('authorization', JSON.stringify(data?.apikey))
+            localStorage.setItem('authorization', data?.apikey)
             navigate('/');
         }
     }, data)

@@ -19,12 +19,10 @@ export const Api = ({ service, id, params }: ApiParamsType) => {
             setLoading(true)
             try {
                 const { data }= await axios.post(endpoint, form, { headers });
-                //toast.success('Registo feito com sucesso');
                 setData(data)
                 setError(null)
             } catch ({response:{data}}: any) {
                 setError(data)
-                //toast.error('😱 Erro: ' + JSON.stringify(e?.response?.data));
                 return data;
             }
             setLoading(false)
@@ -38,8 +36,6 @@ export const Api = ({ service, id, params }: ApiParamsType) => {
             if (params) {
                 const query = new URLSearchParams(params).toString();
                 url = `${url}/?${query}`;
-
-
             }
 
             try {
@@ -48,7 +44,6 @@ export const Api = ({ service, id, params }: ApiParamsType) => {
                 setError(null)
             } catch ({response:{data}}: any) {
                 setError(data)
-                //toast.error('😱 Erro: ' + JSON.stringify(e?.response?.data));
                 return data;
             }
             setLoading(false)
@@ -65,7 +60,6 @@ export const Api = ({ service, id, params }: ApiParamsType) => {
                 setError(null)
             }catch ({response:{data}}: any) {
                     setError(data)
-                    //toast.error('😱 Erro: ' + JSON.stringify(e?.response?.data));
                     return data;
                 }
             setLoading(false)
@@ -79,7 +73,6 @@ export const Api = ({ service, id, params }: ApiParamsType) => {
                 setError(null)
             } catch ({response:{data}}: any) {
                 setError(data)
-                //toast.error('😱 Erro: ' + JSON.stringify(e?.response?.data));
                 return data;
             }
             setLoading(false)
@@ -91,7 +84,7 @@ export const Api = ({ service, id, params }: ApiParamsType) => {
     useMemo(() => {
         if (method === 'GET')
             resolver.get({ id, params })
-    }, [data, id])
+    }, [params, id])
 
     return {
         data, isLoading, error, resolve
@@ -101,13 +94,13 @@ export const Api = ({ service, id, params }: ApiParamsType) => {
 
 
 export const getHeaders = () => {
-    const token = '';//storage.get('token');
+    const token = localStorage.getItem('authorization');
 
     let headers: any = {
         "withCredentials": true,
         "Content-type": "application/json",
     }
-    headers["Authorization"] = `Bearer ${token}`;
+    headers["Authorization"] = token;
     return headers;
 };
 (() => {
@@ -117,4 +110,3 @@ export const getHeaders = () => {
 
 })()
 
-const headers = getHeaders() 
