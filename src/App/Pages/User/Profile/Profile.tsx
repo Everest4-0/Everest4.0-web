@@ -11,13 +11,14 @@ export default function Profile() {
       <Banner></Banner>
       <Container className="container">
         <div className="row mt-3">
-          <div className="col-2">
+          <div className="col-lg-3 col-md-3 col-sm-3">
+            
             <Avatar
               className="img-thumbnail border-0"
               src="/public/assets/img/image-sign-up.jpg"
             />
           </div>
-          <div className="col-5">
+          <div className="col-lg-5 col-md-5 col-sm-5">
             <UserName className="title h4">Noah Mclaren</UserName>
             <Email>noah_mclaren@mail.com</Email>
           </div>
