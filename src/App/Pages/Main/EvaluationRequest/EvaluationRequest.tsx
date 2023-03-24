@@ -1,13 +1,13 @@
 import React, { useMemo, useState } from 'react'
-import { Row } from 'react-bootstrap'
+import { Col, Row } from 'react-bootstrap'
 import { Api } from '../../../Api/Api'
 import { services } from '../../../Api/services'
-import Moment from "react-moment";
 export const EvaluationRequest = () => {
-
+    const meJson: string = localStorage.getItem('data') ?? ''
+    const me = JSON.parse(meJson)
     const [evaluationsSize, setevaluationsSize] = useState<number>(0)
-    const { data: requested, isLoading, error } = Api({ service: services.evaluationRequests.list,params:{requesterId:'44eb445f-78e9-4632-ae53-32ac0d3206a9'} })
-    const { data: request } = Api({ service: services.evaluationRequests.list })
+    const { data: requested, isLoading, error } = Api({ service: services.evaluationRequests.list, params: { requesterId: me?.id } })
+    const { data: request } = Api({ service: services.evaluationRequests.list, params: { requestedId: me?.id } })
     const { data: evaluations } = Api({ service: services.evaluations.list })
 
     useMemo(() => setevaluationsSize(evaluations?.data?.length), [evaluations])
@@ -16,12 +16,12 @@ export const EvaluationRequest = () => {
             <pre>{JSON.stringify(evaluationsSize, null, 1)}</pre>
             <div>EvaluationRequest-</div>
             <Row>
-                <div className="col-lg-6 col-md-6">
+                <Col>
                     <div className="card shadow-xs border">
                         <div className="card-header border-bottom pb-0">
                             <div className="d-sm-flex align-items-center mb-3">
                                 <div>
-                                    <h6 className="font-weight-semibold text-lg mb-0">Solicitação de avaliação</h6>
+                                    <h6 className="font-weight-semibold text-lg mb-0">Solicitação feitas</h6>
                                     <p className="text-sm mb-sm-0 mb-2">These are details about the last transactions</p>
                                 </div>
                                 <div className="ms-auto d-flex">
@@ -80,6 +80,7 @@ export const EvaluationRequest = () => {
                                                         </div>
                                                         <div className="my-auto">
                                                             <h6 className="mb-0 text-sm">{item?.requested?.datas?.firstName} {item?.requested?.datas?.lastName}</h6>
+                                                            <h6 className="mb-0 text-sm">{item?.requester?.datas?.firstName} {item?.requester?.datas?.lastName}</h6>
                                                         </div>
                                                     </div>
                                                 </td>
@@ -113,14 +114,14 @@ export const EvaluationRequest = () => {
                             </div>
                         </div>
                     </div>
-                </div>
+                </Col>
 
-                <div className="col-lg-6 col-md-6">
+                <Col>
                     <div className="card shadow-xs border">
                         <div className="card-header border-bottom pb-0">
                             <div className="d-sm-flex align-items-center mb-3">
                                 <div>
-                                    <h6 className="font-weight-semibold text-lg mb-0">Solicitação de avaliação</h6>
+                                    <h6 className="font-weight-semibold text-lg mb-0">Solicitação de recebidas</h6>
                                     <p className="text-sm mb-sm-0 mb-2">These are details about the last transactions</p>
                                 </div>
                                 <div className="ms-auto d-flex">
@@ -212,7 +213,7 @@ export const EvaluationRequest = () => {
                             </div>
                         </div>
                     </div>
-                </div>
+                </Col>
             </Row>
 
         </>

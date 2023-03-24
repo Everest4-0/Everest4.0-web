@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 type ApiParamsType = {
     service: any,
@@ -8,8 +8,8 @@ type ApiParamsType = {
 }
 export const Api = ({ service, id, params }: ApiParamsType) => {
   
-    const [data, setData] = useState<any>()
-    const [isLoading, setLoading] = useState<boolean>()
+    const [data, setData] = useState<any>({})
+    const [isLoading, setLoading] = useState<boolean>(false)
     const [error, setError] = useState<any>()
     const { endpoint, method }: any = service;
     const headers = getHeaders()
@@ -81,10 +81,10 @@ export const Api = ({ service, id, params }: ApiParamsType) => {
 
     const resolve = resolver[method.toLowerCase()]
 
-    useMemo(() => {
+    useEffect(() => {
         if (method === 'GET')
             resolver.get({ id, params })
-    }, [params, id])
+    }, [JSON.stringify(params)])
 
     return {
         data, isLoading, error, resolve

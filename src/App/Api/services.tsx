@@ -33,5 +33,10 @@ export const services: any = {
   },
   
   acls: {},
-  chats: {},
+  courses: {
+    list:{
+      endpoint: "courses/courses",
+      method: "GET",
+    }
+  },
 };

@@ -1,4 +1,5 @@
-import { EvaluationRequest } from "./EvaluationRequest/EvaluationRequest";
+
+import { Users } from "./Users/Users";
 import { Main } from "./Main";
 
 type routerType = {
@@ -8,6 +9,6 @@ type routerType = {
 }
 export const mainRoutes: routerType[] = [
     { path: "", component: Main, },
-    { path: "users", component: EvaluationRequest, },
+    { path: "users", component: Users, },
 ];
 
