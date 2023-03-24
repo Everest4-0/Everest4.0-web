@@ -1,4 +1,9 @@
-import { Container, Items, Menu } from "./Navbar.style";
+import {
+  Container,
+  Items,
+  Menu,
+  SearchBox,
+} from "./Navbar.style";
 
 export default function Navbar() {
   return (
@@ -34,9 +39,20 @@ export default function Navbar() {
                   </svg>
                 </Items>
                 <Items>
-                <svg height="16" width="16" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="cursor-pointers">
-                  <path fill-rule="evenodd" d="M5.25 9a6.75 6.75 0 0113.5 0v.75c0 2.123.8 4.057 2.118 5.52a.75.75 0 01-.297 1.206c-1.544.57-3.16.99-4.831 1.243a3.75 3.75 0 11-7.48 0 24.585 24.585 0 01-4.831-1.244.75.75 0 01-.298-1.205A8.217 8.217 0 005.25 9.75V9zm4.502 8.9a2.25 2.25 0 104.496 0 25.057 25.057 0 01-4.496 0z" clip-rule="evenodd" />
-                </svg>
+                  <svg
+                    height="16"
+                    width="16"
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    className="cursor-pointers"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M5.25 9a6.75 6.75 0 0113.5 0v.75c0 2.123.8 4.057 2.118 5.52a.75.75 0 01-.297 1.206c-1.544.57-3.16.99-4.831 1.243a3.75 3.75 0 11-7.48 0 24.585 24.585 0 01-4.831-1.244.75.75 0 01-.298-1.205A8.217 8.217 0 005.25 9.75V9zm4.502 8.9a2.25 2.25 0 104.496 0 25.057 25.057 0 01-4.496 0z"
+                      clip-rule="evenodd"
+                    />
+                  </svg>
                 </Items>
                 <Items>Image</Items>
               </Menu>
@@ -50,12 +66,38 @@ export default function Navbar() {
           <div className="row p-0 m-0 d-flex justify-content-between align-items-center ">
             <div className="col p-0 m-0">
               <Menu className="d-flex align-items-center" type={"none"}>
-                <Items>Profile</Items>
+                <Items className="link link-active">Profile</Items>
               </Menu>
             </div>
             <div className="col p-2 m-0">
               <Menu className="d-flex justify-content-end" type={"none"}>
-                <Items>Search Box</Items>
+                <Items>
+                    <div className="input-group border-dark">
+                      <span className="input-group-text border-dark bg-dark text-white">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="16px"
+                          height="16px"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke-width="1.5"
+                          stroke="currentColor"
+                          className="opacity-8"
+                        >
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"
+                          />
+                        </svg>
+                      </span>
+                      <SearchBox
+                        type="text"
+                        className="form-control border-dark bg-dark"
+                        placeholder="Search"
+                      />
+                    </div>
+                </Items>
               </Menu>
             </div>
           </div>
