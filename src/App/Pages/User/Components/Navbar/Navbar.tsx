@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import {
   Container,
   Items,
@@ -13,7 +14,7 @@ export default function Navbar() {
           <div className="row p-0 m-0 d-flex justify-content-between align-items-center ">
             <div className="col p-0 m-0">
               <Menu className="d-flex align-items-center" type={"none"}>
-                <Items className="logo">Corporate UI</Items>
+                <Items className="logo">Everest4.0</Items>
                 <Items>Dashboard</Items>
                 <Items>Tables</Items>
                 <Items>Wallet</Items>
@@ -22,6 +23,7 @@ export default function Navbar() {
             </div>
             <div className="col p-0 m-0">
               <Menu className="d-flex justify-content-end" type={"none"}>
+              <Link to={"/admin"}>
                 <Items>
                   <svg
                     width="16"
@@ -38,6 +40,7 @@ export default function Navbar() {
                     ></path>
                   </svg>
                 </Items>
+                </Link>
                 <Items>
                   <svg
                     height="16"

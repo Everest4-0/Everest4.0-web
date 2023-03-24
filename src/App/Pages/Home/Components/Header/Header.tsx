@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom"
 
 export const Header = () => {
     return <nav className="navbar navbar-main navbar-expand-lg mx-5 px-0 shadow-none rounded" id="navbarBlur" navbar-scroll="true">
@@ -113,9 +114,9 @@ export const Header = () => {
               </ul>
             </li>
             <li className="nav-item ps-2 d-flex align-items-center">
-              <a href="javascript:;" className="nav-link text-body p-0">
+              <Link to={"/"}className="nav-link text-body p-0">
                 <img src="../assets/img/team-2.jpg" className="avatar avatar-sm" alt="avatar"/>
-              </a>
+              </Link>
             </li>
           </ul>
         </div>

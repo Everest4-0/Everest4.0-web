@@ -1,5 +1,5 @@
 
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Link, useFormAction, useNavigate } from "react-router-dom";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button, Form, Row } from "react-bootstrap";
@@ -25,19 +25,19 @@ export const SignInForm = () => {
     const { resolve, data, loading, error }: any = Api({ service: services.auth.singIn });
 
     const onSubmit = (form: any) => resolve({ form })
-    useMemo(() => {
+    useEffect(() => {
         debugger
         if (data?.id) {
             //TODO: Find a way to use a storage beside localstorage
             localStorage.setItem('data', JSON.stringify(data))
             //TODO: fix on the backend the authorization key name use 'authorization' beside 'apikey'
             localStorage.setItem('authorization', data?.apikey)
-            navigate('/');
+            navigate('/dashboard/profile');
         }
-    }, data)
+    }, [data])
     return (
         <form role="form" onSubmit={handleSubmit(onSubmit)} >
-            <label>Email Address</label>
+            <label>Email Address{JSON.stringify(data)}</label>
             <div className="mb-3">
                 <Form.Control placeholder="Enter your email address" autoComplete="off" type="email" {...register("email")} />
                 {errors.email && <ErrorMessage message={errors.email?.message} />}

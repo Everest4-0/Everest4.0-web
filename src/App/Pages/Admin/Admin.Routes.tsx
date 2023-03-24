@@ -4,7 +4,7 @@ import { Admin } from "./Admin";
 
 export const adminRoutes = [
   { path: "", component: Admin },
-  { path: "users", component: Users },
-  { path: "courses", component: Courses },
+  { path: "users/*", component: Users },
+  { path: "courses/*", component: Courses },
 ];
 
