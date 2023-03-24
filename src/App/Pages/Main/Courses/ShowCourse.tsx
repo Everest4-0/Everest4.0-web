@@ -1,11 +1,20 @@
-import React from 'react'
+import React, { useState } from 'react'
+import { useParams } from 'react-router-dom'
+import { Api } from '../../../Api/Api'
+import { services } from '../../../Api/services'
 
 export const ShowCourse = () => {
+    const { id } = useParams()
+    const [params, setParams] = useState({ id })
+    const { data: { data }, isLoading, error } = Api({ service: services.courses.list, id, params })
     return (
         <>
 
             <div className="pt-5 pb-6 bg-cover" style={{ backgroundImage: "url('/public/assets/img/header-blue-purple.jpg')" }}>
-                
+                <div className="container ">
+                    <h4>#{data.code}</h4>
+                    <h2>{data.title}</h2>
+                </div>
             </div>
 
             <div className="container my-3 py-3">
@@ -301,7 +310,7 @@ export const ShowCourse = () => {
                                         <div className="row">
                                             <div className="col-4 pe-1">
                                                 <div className="chart">
-                                                    
+
                                                 </div>
                                             </div>
                                             <div className="col-8 my-auto">
@@ -484,7 +493,7 @@ export const ShowCourse = () => {
             <div className="row mb-5">
                 <div className="col-md-4">
                     <h6 className="text-sm font-weight-semibold mb-1">Current Plan</h6>
-                    <p className="text-sm">We’ll credit your account if you need to <br/> downgrade during the billing cycle.</p>
+                    <p className="text-sm">We’ll credit your account if you need to <br /> downgrade during the billing cycle.</p>
                 </div>
                 <div className="col-md-4">
                     <ul className="list-group">
